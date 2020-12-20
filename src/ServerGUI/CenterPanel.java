@@ -1,12 +1,12 @@
-package Server;
+package ServerGUI;
 
 import java.awt.*;
 import java.util.Iterator;
 import javax.swing.*;
-import datebase.Warehouse;
+import Database.*;
 
 public class CenterPanel extends JPanel {
-		 
+
 	AlterPanel j0;
 	AlterPanel j1;
 	AlterPanel j2;
@@ -14,14 +14,13 @@ public class CenterPanel extends JPanel {
 	AlterPanel j4;
 
 	static CardLayout card = new CardLayout();
+
 	public CenterPanel(Warehouse wh) {
 		setLayout(card);
-		setPreferredSize(new Dimension(250,1000));
 		Iterator<String> iter = wh.keySet().iterator();
 		String s[] = new String[10];
-		for(int i = 0; i < wh.size(); i++)	
-		{	
-			s[i] = (String)iter.next();
+		for (int i = 0; i < wh.size(); i++) {
+			s[i] = (String) iter.next();
 		}
 
 		j0 = new AlterPanel(wh.get(s[0]).size(), wh.get(s[0]));
@@ -30,16 +29,10 @@ public class CenterPanel extends JPanel {
 		j3 = new AlterPanel(wh.get(s[3]).size(), wh.get(s[3]));
 		j4 = new AlterPanel(wh.get(s[4]).size(), wh.get(s[4]));
 
-		add(j0,"a"+0);
-		add(j1,"a"+1);
-		add(j2,"a"+2);
-		add(j3,"a"+3);
-		add(j4,"a"+4);		
+		add(j0, "a" + 0);
+		add(j1, "a" + 1);
+		add(j2, "a" + 2);
+		add(j3, "a" + 3);
+		add(j4, "a" + 4);
 	}
-}		
-
-		
-
-		
-		
-
+}
