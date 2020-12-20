@@ -10,12 +10,12 @@ public class MenuBarAction implements FocusListener {
 	@Override
 	public void focusGained(FocusEvent e) {
 		JButton btn = (JButton) e.getSource();
-		btn.setBackground(Color.GREEN);
-	}
+		btn.setBackground(new Color(255,165,0)); // 橙色
+	} 
 
 	@Override
 	public void focusLost(FocusEvent e) {// 菜单栏按钮事件监听
 		JButton btn = (JButton) e.getSource();
-		btn.setBackground(new Color(238, 238, 238));
+		btn.setBackground(new Color(255, 239, 213)); // 番木瓜色
 	}
 }

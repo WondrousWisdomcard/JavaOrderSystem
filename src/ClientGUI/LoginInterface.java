@@ -6,14 +6,17 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class LoginInterface extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
 	public LoginInterface() {
 		setTitle("登陆");
 		setBounds(450, 300, 580, 250);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		Container c = getContentPane();
-		c.setBackground(new Color(255, 202, 24));// 背景颜色
-		c.setLayout(null);// 设置绝对布局
+		c.setBackground(new Color(255, 215, 0));
+		c.setLayout(null);// 绝对布局
 
 		JLabel topImg = new JLabel();// 添加图片标签
 
@@ -22,31 +25,32 @@ public class LoginInterface extends JFrame {
 		topImg.setBounds(0, -95, 580, 250);
 
 		JLabel text = new JLabel("账号 ");
-		text.setFont(new Font("宋体", Font.BOLD, 16));// 设置账号标签字体
+		text.setFont(new Font("宋体", Font.BOLD, 20));
 		text.setBounds(135, 85, 80, 20);
 
 		JTextField inText = new JTextField(20);
-		inText.setFont(new Font("MS Gothic", Font.BOLD, 16));
+		inText.setFont(new Font("MS Gothic", Font.BOLD, 20));
 		inText.setText("admin");
-		inText.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));// 设置红色边框
+		inText.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));// 红色
 		inText.setBounds(180, 85, 200, 20);
 
 		JLabel psw = new JLabel("密码  ");
-		psw.setFont(new Font("宋体", Font.BOLD, 16));// 设置密码标签字体
+		psw.setFont(new Font("宋体", Font.BOLD, 16));
 		psw.setBounds(135, 115, 80, 20);
 
 		JPasswordField inPsw = new JPasswordField();
 		inPsw.setColumns(20);
 		inPsw.setFont(new Font("MS Gothic", Font.BOLD, 16));
 		inPsw.setEchoChar('*');// 设置密码显示字符
-		inPsw.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));// 设置红色边框
+		inPsw.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));// 红色
 		inPsw.setBounds(180, 115, 200, 20);
 
 		JButton submit = new JButton("登陆");
-		submit.setFont(new Font("宋体", Font.BOLD, 24));// 设置密码标签字体
+		submit.setFont(new Font("宋体", Font.BOLD, 24));
 		submit.setBorderPainted(false);
 		submit.setBackground(new Color(255, 202, 24));
 		submit.setBounds(230, 160, 100, 40);
+
 		c.add(topImg);
 		c.add(text);
 		c.add(inText);
@@ -61,9 +65,12 @@ public class LoginInterface extends JFrame {
 				if (inPsw.getText().equals("admin")) {
 					setVisible(false);
 					new OperatorInterface();
-				} else
-					inPsw.setText("");// 清空密码框数据
-				inPsw.requestFocus();// 使光标移至密码框开头
+				} 
+				else{
+                    JOptionPane.showMessageDialog(c,"密码错误");
+					inPsw.setText("");
+					inPsw.requestFocus();
+                } 
 			}
 		});
 	}

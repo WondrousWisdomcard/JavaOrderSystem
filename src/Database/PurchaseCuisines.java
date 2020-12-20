@@ -24,9 +24,11 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> {// 顾客已购买菜品
 			buf.write("茶位费" + " " + "6.0" + "x" + peoples + " " + peoples * 6.0);
 			buf.newLine();
 			for (int i = 0; i < size(); i++) {
-				buf.write(get(i).getname() + " " + get(i).getprice() + "x" + get(i).getnum() + " "
-						+ get(i).getAmountPrice());
-				buf.newLine();
+				if (get(i).getname() != "") {
+					buf.write(get(i).getname() + " " + get(i).getprice() + "x" + get(i).getnum() + " "
+							+ get(i).getAmountPrice());
+					buf.newLine();
+				}
 			}
 			double finAmount = amount + peoples * 6.0;
 			buf.write("总计：" + finAmount);
@@ -34,7 +36,12 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> {// 顾客已购买菜品
 			buf.write(time1.format(date));
 			buf.close();
 			out.close();
-
+			for (int i = 0; i < size(); i++) {
+				get(i).setname("");
+				get(i).setprice(0);
+				get(i).setnum(0);
+				get(i).setAmountPrice(0);
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}

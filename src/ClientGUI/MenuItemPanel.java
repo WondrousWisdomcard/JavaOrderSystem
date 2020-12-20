@@ -1,12 +1,12 @@
 package ClientGUI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class MenuItemPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
 	JButton imgBtn = new JButton();
 	JButton textBtn = new JButton();
 
@@ -18,8 +18,8 @@ public class MenuItemPanel extends JPanel {
 		imgBtn.setBorderPainted(false);
 		imgBtn.setBackground(Color.white);
 
-		textBtn.setText(id + "    " + name + "    " + price + "  元");
-		textBtn.setFont(new Font("宋体", Font.BOLD, 14));
+		textBtn.setText(id + "    " + name + "    " + price + "元");
+		textBtn.setFont(new Font("宋体", Font.BOLD, 15));
 		textBtn.setBorderPainted(false);
 		textBtn.setBackground(Color.white);
 
