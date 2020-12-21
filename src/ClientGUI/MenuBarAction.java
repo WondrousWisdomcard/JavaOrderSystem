@@ -10,7 +10,7 @@ public class MenuBarAction implements FocusListener {
 	@Override
 	public void focusGained(FocusEvent e) {
 		JButton btn = (JButton) e.getSource();
-		btn.setBackground(new Color(255,165,0)); // ³ÈÉ«
+		btn.setBackground(new Color(255,222,173));
 	} 
 
 	@Override

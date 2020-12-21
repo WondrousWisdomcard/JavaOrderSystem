@@ -15,7 +15,7 @@ public class LoginInterface extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		Container c = getContentPane();
-		c.setBackground(new Color(255, 215, 0));
+		c.setBackground(new Color(240,230,140));
 		c.setLayout(null);// 绝对布局
 
 		JLabel topImg = new JLabel();// 添加图片标签
@@ -25,7 +25,7 @@ public class LoginInterface extends JFrame {
 		topImg.setBounds(0, -95, 580, 250);
 
 		JLabel text = new JLabel("账号 ");
-		text.setFont(new Font("宋体", Font.BOLD, 20));
+		text.setFont(new Font("宋体", Font.BOLD, 16));
 		text.setBounds(135, 85, 80, 20);
 
 		JTextField inText = new JTextField(20);

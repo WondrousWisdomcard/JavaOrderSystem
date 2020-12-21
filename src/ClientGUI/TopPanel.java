@@ -1,26 +1,21 @@
 package ClientGUI;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class TopPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 
 	public TopPanel() {
-		setLayout(new FlowLayout());
-		setBackground(new Color(255, 215, 0));
+		setLayout(new BorderLayout());
+		setBackground(new Color(240,230,140));
+		setPreferredSize(new Dimension(1000,100));
+		JLabel top = new JLabel("潮汕火锅点餐系统",JLabel.CENTER);
+		top.setFont(new Font("宋体", Font.BOLD, 55));
+		top.setForeground(new Color(139, 0, 0));
 
-		JLabel topC = new JLabel("潮汕火锅点餐系统");
-		topC.setFont(new Font("宋体", Font.BOLD, 40));
-		topC.setForeground(new Color(139, 0, 0));
-
-		add(topC);
-		// add(topE);
-		// add(topImg);
+		add(top,BorderLayout.CENTER);
 	}
 }

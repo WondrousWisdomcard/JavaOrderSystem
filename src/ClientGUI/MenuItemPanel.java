@@ -16,12 +16,12 @@ public class MenuItemPanel extends JPanel {
 		Icon icon = new ImageIcon(address);
 		imgBtn.setIcon(icon);
 		imgBtn.setBorderPainted(false);
-		imgBtn.setBackground(Color.white);
+		imgBtn.setBackground(new Color(255,218,185));
 
 		textBtn.setText(id + "    " + name + "    " + price + "Ôª");
 		textBtn.setFont(new Font("ËÎÌå", Font.BOLD, 15));
 		textBtn.setBorderPainted(false);
-		textBtn.setBackground(Color.white);
+		textBtn.setBackground(new Color(255,160,122));
 
 		add(imgBtn, BorderLayout.NORTH);
 		add(textBtn, BorderLayout.CENTER);
