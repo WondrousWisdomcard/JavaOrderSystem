@@ -24,7 +24,7 @@ public class EastPanel extends JPanel {
 
 		order_list = new JPanel();
 		order_list.setLayout(new FlowLayout());
-		order_list.setPreferredSize(new Dimension(600, 1000));
+		order_list.setPreferredSize(new Dimension(400, 1000));
 
 		JScrollPane js = new JScrollPane(order_list);
 		js.setBorder(BorderFactory.createEmptyBorder());

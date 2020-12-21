@@ -85,6 +85,9 @@ class ServerOperatorInterface extends JFrame {
 			wp.btns[i].addActionListener(new MyTurnPageActionListener(cp.card, cp));
 		}
 
+		
+		
+
 		JScrollPane jsCP = new JScrollPane(cp);
 		jsCP.setBorder(BorderFactory.createEmptyBorder());
 		c.add(jsCP, BorderLayout.CENTER);

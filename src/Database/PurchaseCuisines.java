@@ -47,4 +47,5 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> {// ¹Ë¿ÍÒÑ¹ºÂò²ËÆ·
 		}
 	}
 
+	
 }

@@ -20,7 +20,8 @@ public class TaskItemPanel extends JPanel {
         content.setText(str);
         content.setFont(new Font("ËÎÌו", Font.BOLD, 10));
         content.setBackground(new Color(230, 250, 250));
-
+        content.setEditable(false);
+        
         left.add(content);
         add(left, BorderLayout.WEST);
 
