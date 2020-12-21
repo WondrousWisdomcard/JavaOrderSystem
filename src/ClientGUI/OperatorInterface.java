@@ -2,8 +2,7 @@ package ClientGUI;
 
 import java.awt.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Iterator;
 
 import javax.swing.*;
@@ -12,14 +11,17 @@ import Database.*;
 
 class OperatorInterface extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	public Warehouse wh = new Warehouse();
 	public CenterPanel cp = new CenterPanel(wh);
 	public TopPanel tp = new TopPanel();
 	public WestPanel wp = new WestPanel();
 	public EastPanel ep = new EastPanel();
-	public ListItemPanel[] order_form = new ListItemPanel[30];// 点单列表
+	public ListItemPanel[] orderForm = new ListItemPanel[30];// 点单列表
 	public double countPrice = 0.0;// 总价
 	public PurchaseCuisines pcc;// 已购买菜品集合
+	public int num = 0;// 人数初始值
 
 	public OperatorInterface() {
 		setBounds(180, 10, 1200, 800);
@@ -29,18 +31,27 @@ class OperatorInterface extends JFrame {
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());// 边缘布局
 
-		for (int i = 0; i < order_form.length; i++) {// 添加菜单菜品
+		for (int i = 0; i < orderForm.length; i++) {// 添加菜单菜品
 
-			order_form[i] = new ListItemPanel("无", 0.0, "01");
-			order_form[i].addNum.addActionListener(new ChangeNumberActionListener(i));
-			order_form[i].delNum.addActionListener(new ChangeNumberActionListener(i));
-			order_form[i].subNum.addActionListener(new ChangeNumberActionListener(i));
+			orderForm[i] = new ListItemPanel("无", 0.0, "01");
+			orderForm[i].addNum.addActionListener(new ChangeCuiNumberListener(i));
+			orderForm[i].delNum.addActionListener(new ChangeCuiNumberListener(i));
+			orderForm[i].subNum.addActionListener(new ChangeCuiNumberListener(i));
 
-			ep.order_list.add(order_form[i]);// 将定义完毕的单个已点菜品框加入到
+			ep.order_list.add(orderForm[i]);// 将定义完毕的单个已点菜品框加入到
 
 		}
 
 		ep.delAll.addActionListener(new DeletionListener(0));// 传入0时仅清除全部已选菜品
+
+		ep.confirm_cos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int num2 = ep.jpnum.getText().equals("") ? 0 : Integer.valueOf(ep.jpnum.getText());
+				countPrice += (num2 - num) * 6;
+				ep.setCountPrice(countPrice);
+				num = num2;
+			}
+		});
 
 		Iterator<String> iter = wh.keySet().iterator();// 获取菜系名
 		String[] s = new String[10];
@@ -112,7 +123,6 @@ class OperatorInterface extends JFrame {
 	}
 
 	class ImgAction implements ActionListener {
-		// 点击图片使下单栏响应
 		public String name;
 		public double price;
 		public String id;
@@ -124,26 +134,37 @@ class OperatorInterface extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			int i;
-			for (i = 0;; i++) {
-				if (order_form[i].isVisible() == false)
-					break;
+			int i, sign = 0;
+			for (i = 0; i < orderForm.length; i++) {
+				if (orderForm[i].isVisible() && orderForm[i].getName().equals(name)) {
+					orderForm[i].num++;
+					String Snum = Integer.toString(orderForm[i].num);
+					orderForm[i].jnum.setText(Snum);
+					countPrice += orderForm[i].price;
+					sign = 1;
+				}
 			}
-			order_form[i].setVisible(true);
-			order_form[i].setName(name);
-			order_form[i].setPrice(price);
-			order_form[i].setID(id);
-			order_form[i].setNum(1);
-			countPrice += order_form[i].getAmount();// 动态变换
-			ep.setCountPrice(countPrice);
+			if (sign == 0) {
+				for (i = 0;; i++) {
+					if (!orderForm[i].isVisible())
+						break;
+				}
+				orderForm[i].setVisible(true);
+				orderForm[i].setName(name);
+				orderForm[i].setPrice(price);
+				orderForm[i].setID(id);
+				orderForm[i].setNum(1);
+				countPrice += orderForm[i].getAmount();// 动态变换
+				ep.setCountPrice(countPrice);
+			}
 		}
 	}
 
-	class ChangeNumberActionListener implements ActionListener {
+	class ChangeCuiNumberListener implements ActionListener {
 		// 对以点菜品的单独面板上的增删改
 		public int i;// 所改面板编号
 
-		public ChangeNumberActionListener(int i) {
+		public ChangeCuiNumberListener(int i) {
 			this.i = i;
 		}
 
@@ -151,32 +172,32 @@ class OperatorInterface extends JFrame {
 			JButton btn = (JButton) e.getSource();
 
 			if (btn.getText().equals("+1")) {
-				order_form[i].num++;
+				orderForm[i].num++;
 
-				String Snum = Integer.toString(order_form[i].num);
-				order_form[i].jnum.setText(Snum);
-				countPrice += order_form[i].price;
+				String Snum = Integer.toString(orderForm[i].num);
+				orderForm[i].jnum.setText(Snum);
+				countPrice += orderForm[i].price;
 			}
 			if (btn.getText().equals("-1")) {
-				order_form[i].num--;
+				orderForm[i].num--;
 
-				String Snum = Integer.toString(order_form[i].num);
-				order_form[i].jnum.setText(Snum);
-				countPrice -= order_form[i].price;
+				String Snum = Integer.toString(orderForm[i].num);
+				orderForm[i].jnum.setText(Snum);
+				countPrice -= orderForm[i].price;
 
-				if (order_form[i].num < 1) {
-					order_form[i].setVisible(false);
+				if (orderForm[i].num < 1) {
+					orderForm[i].setVisible(false);
 				}
 			}
 			if (btn.getText().equals("撤销")) {
 				System.out.println("撤销");
-				order_form[i].setNum(1);// 点击取消时使得数字恢复1
-				order_form[i].setName("无");
-				order_form[i].setPrice(0.0);
-				order_form[i].id = "000";
-				countPrice -= order_form[i].amount;
-				order_form[i].amount = 0.0;
-				order_form[i].setVisible(false);
+				orderForm[i].setNum(1);// 点击取消时使得数字恢复1
+				orderForm[i].setName("无");
+				orderForm[i].setPrice(0.0);
+				orderForm[i].id = "000";
+				countPrice -= orderForm[i].amount;
+				orderForm[i].amount = 0.0;
+				orderForm[i].setVisible(false);
 			}
 			ep.setCountPrice(countPrice);// 最终菜单价格
 		}
@@ -189,6 +210,7 @@ class OperatorInterface extends JFrame {
 		public DeletionListener(int i) {
 			this.i = i;
 			pcc = new PurchaseCuisines();
+			ep.jpnum.setText("0");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -200,12 +222,12 @@ class OperatorInterface extends JFrame {
 				k.setFont(new Font("宋体", Font.BOLD, 20));
 				result.add(k);
 				result.setVisible(true);
-				
-				int t,count = 0;
-						for (t = 0; t < order_form.length; t++) {
-							if (order_form[t].isVisible() != false)
-							count++;
-						}
+
+				int t, count = 0;
+				for (t = 0; t < orderForm.length; t++) {
+					if (orderForm[t].isVisible() != false)
+						count++;
+				}
 
 				char a = ep.jpnum.getText().charAt(0);
 				try {
@@ -214,35 +236,36 @@ class OperatorInterface extends JFrame {
 						throw new Exception();
 					} else {
 						int j;
-						for (j = 0; j < order_form.length; j++) {
-							if (order_form[j].isVisible() != false)
-								pcc.add(new HasCuisine(order_form[j].name, order_form[j].num, order_form[j].price));
+						for (j = 0; j < orderForm.length; j++) {
+							if (orderForm[j].isVisible() != false)
+								pcc.add(new HasCuisine(orderForm[j].name, orderForm[j].num, orderForm[j].price));
 						}
 						k.setText("打单成功！");
 						pcc.printFile(Integer.valueOf(ep.jpnum.getText()), countPrice);
 
-						for (int i = 0; i < order_form.length; i++) {
-							order_form[i].setVisible(false);
-							order_form[i].id = "000";
-							order_form[i].setPrice(0.0);
-							order_form[i].setName("无");
-							order_form[i].setNum(1);
+						for (int i = 0; i < orderForm.length; i++) {
+							orderForm[i].setVisible(false);
+							orderForm[i].id = "000";
+							orderForm[i].setPrice(0.0);
+							orderForm[i].setName("无");
+							orderForm[i].setNum(1);
 						}
 						ep.setCountPrice(0.0);
 						ep.jpnum.setText("0");
 						countPrice = 0.0;
+						num = 0;
 					}
 				} catch (Exception r) {
 					k.setText("您尚未点单," + '\n' + "或用餐人数填写异常！");
 
 				}
 			} else {
-				for (int i = 0; i < order_form.length; i++) {
-					order_form[i].setVisible(false);
-					order_form[i].id = "000";
-					order_form[i].setPrice(0.0);
-					order_form[i].setName("无");
-					order_form[i].setNum(1);
+				for (int i = 0; i < orderForm.length; i++) {
+					orderForm[i].setVisible(false);
+					orderForm[i].id = "000";
+					orderForm[i].setPrice(0.0);
+					orderForm[i].setName("无");
+					orderForm[i].setNum(1);
 				}
 				ep.setCountPrice(0.0);
 			}
@@ -250,6 +273,7 @@ class OperatorInterface extends JFrame {
 	}// end ActionPerformed
 
 	public static void main(String[] args) {
+
 		OperatorInterface a = new OperatorInterface();
 
 		a.ep.confirm_btn.addActionListener(new ActionListener() {

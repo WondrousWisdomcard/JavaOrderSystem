@@ -36,7 +36,7 @@ public class ListItemPanel extends JPanel {
 		jname = new JLabel("ËÎÌו", JLabel.CENTER);
 
 		jname.setText(name);
-		jname.setFont(new Font("ËÎÌו", Font.BOLD, 22));
+		jname.setFont(new Font("ËÎÌו", Font.BOLD, 24));
 		item_name.add(jname, BorderLayout.WEST);
 		item_name.setBackground(new Color(240,230,140));
 
