@@ -15,7 +15,7 @@ public class LoginInterface extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		Container c = getContentPane();
-		c.setBackground(new Color(255,255,240));
+		c.setBackground(new Color(255, 255, 240));
 		c.setLayout(null);// ¾ø¶Ô²¼¾Ö
 
 		JLabel topImg = new JLabel();// Ìí¼ÓÍ¼Æ¬±êÇ©
@@ -48,7 +48,7 @@ public class LoginInterface extends JFrame {
 		JButton submit = new JButton("µÇÂ½");
 		submit.setFont(new Font("ËÎÌå", Font.BOLD, 24));
 		submit.setBorderPainted(false);
-		submit.setBackground(new Color(255,255,224));
+		submit.setBackground(new Color(255, 255, 224));
 		submit.setBounds(230, 160, 100, 40);
 
 		c.add(topImg);
@@ -65,12 +65,11 @@ public class LoginInterface extends JFrame {
 				if (inPsw.getText().equals("admin")) {
 					setVisible(false);
 					new OperatorInterface();
-				} 
-				else{
-                    JOptionPane.showMessageDialog(c,"ÃÜÂë´íÎó");
+				} else {
+					JOptionPane.showMessageDialog(c, "ÃÜÂë´íÎó");
 					inPsw.setText("");
 					inPsw.requestFocus();
-                } 
+				}
 			}
 		});
 	}

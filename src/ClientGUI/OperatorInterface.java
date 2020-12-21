@@ -47,25 +47,33 @@ class OperatorInterface extends JFrame {
 		ep.confirm_cos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int num2 = ep.jpnum.getText().equals("") ? 0 : Integer.valueOf(ep.jpnum.getText());
+				if(num2 < 0){
+					num2 = 0;
+					ep.jpnum.setText("0");
+				}
 				countPrice += (num2 - num) * 6;
 				ep.setCountPrice(countPrice);
 				num = num2;
 			}
 		});
 
-		Iterator<String> iter = wh.keySet().iterator();// 获取菜系名
 		String[] s = new String[10];
-		for (int i = 0; i < wh.size(); i++) {
-			s[i] = (String) iter.next();
-		}
-
+		s[0] = "pot_bottom";
+		s[1] = "meat";
+		s[2] = "vegetable";
+		s[3] = "snack";
+		s[4] = "drink";
+		s[5] = "staplefood";
+		
 		Iterator<String> iter0 = wh.get(s[0]).keySet().iterator();// 获取相关菜系的菜品id
 		Iterator<String> iter1 = wh.get(s[1]).keySet().iterator();
 		Iterator<String> iter2 = wh.get(s[2]).keySet().iterator();
 		Iterator<String> iter3 = wh.get(s[3]).keySet().iterator();
 		Iterator<String> iter4 = wh.get(s[4]).keySet().iterator();
+		Iterator<String> iter5 = wh.get(s[5]).keySet().iterator();
 
 		Cuisine cuisine;
+		
 		for (int i = 0; i < cp.j0.size; i++) {
 			String j = (String) iter0.next();// 对每个菜系页面的具体菜品的展示按钮添加监听
 			cuisine = wh.get(s[0]).get(j);
@@ -106,6 +114,15 @@ class OperatorInterface extends JFrame {
 			cp.j4.mip[i].textBtn
 					.addActionListener(new ImgAction(cuisine.getname(), cuisine.getprice(), cuisine.getID()));
 		}
+		for (int i = 0; i < cp.j5.size; i++) {
+			String j = (String) iter5.next();
+			cuisine = wh.get(s[5]).get(j);
+			cp.j5.mip[i].imgBtn
+					.addActionListener(new ImgAction(cuisine.getname(), cuisine.getprice(), cuisine.getID()));
+			cp.j5.mip[i].textBtn
+					.addActionListener(new ImgAction(cuisine.getname(), cuisine.getprice(), cuisine.getID()));
+		}
+
 		for (int i = 0; i < wp.getComponentCount(); i++)// 对左栏的按钮添加动作监听
 		{
 			wp.btns[i].addActionListener(new PageTurnListener(cp.card, cp));

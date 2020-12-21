@@ -57,11 +57,7 @@ public class ListItemPanel extends JPanel {
 		delNum.setBorderPainted(false);
 		delNum.setForeground(new Color(225, 245, 238));
 		delNum.setBackground(new Color(225, 69, 0));
-		/*delNum.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});*/
+		
 		setVisible(false);
 
 		remark.setFont(new Font("ËÎÌו", Font.BOLD, 14));

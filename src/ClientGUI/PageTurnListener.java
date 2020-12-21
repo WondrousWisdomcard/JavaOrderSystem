@@ -21,14 +21,15 @@ class PageTurnListener implements ActionListener {
         JButton jb = (JButton) e.getSource();
         if (jb.getText().equals("   锅 底 类   "))
             card.show(jp, "a0");
-        if (jb.getText().equals("   小 吃 类   "))
+        else if (jb.getText().equals("   荤 菜 类   "))
             card.show(jp, "a1");
-        if (jb.getText().equals("   荤 菜 类   "))
+        else if (jb.getText().equals("   素 菜 类   "))
             card.show(jp, "a2");
-        if (jb.getText().equals("   素 菜 类   "))
+        else if (jb.getText().equals("   小 吃 类   "))
             card.show(jp, "a3");
-        if (jb.getText().equals("   酒 水 类   "))
+        else if (jb.getText().equals("   酒 水 类   "))
             card.show(jp, "a4");
+        else if (jb.getText().equals("   主 食 类   "))
+            card.show(jp, "a5");
     }
-
 }
