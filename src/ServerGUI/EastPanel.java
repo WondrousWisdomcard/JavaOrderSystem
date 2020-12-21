@@ -17,7 +17,7 @@ public class EastPanel extends JPanel {
 		topTital.setLayout(new BorderLayout());
 
 		JLabel j2 = new JLabel("当 前 请 求", JLabel.CENTER);
-		j2.setFont(new Font("微软雅黑", Font.BOLD, 30));
+		j2.setFont(new Font("宋体", Font.BOLD, 30));
 		j2.setBounds(60, 70, 100, 20);
 		topTital.setBackground(Color.white);
 		topTital.add(j2, BorderLayout.SOUTH);
@@ -30,7 +30,7 @@ public class EastPanel extends JPanel {
 		js.setBorder(BorderFactory.createEmptyBorder());
 
 		count = new JLabel("当前订单数量： " + num);
-		count.setFont(new Font("微软雅黑", Font.BOLD, 30));
+		count.setFont(new Font("宋体", Font.BOLD, 30));
 
 		countPart = new JPanel();
 		countPart.add(count);

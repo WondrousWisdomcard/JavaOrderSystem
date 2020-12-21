@@ -20,32 +20,32 @@ public class ServerLoginInterface extends JFrame {
 		c.setLayout(null);
 
 		JLabel top = new JLabel("ºóÌ¨¹ÜÀíÏµÍ³", JLabel.CENTER);
-		top.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 36));
+		top.setFont(new Font("ËÎÌå", Font.BOLD, 36));
 		top.setBounds(0, -95, 580, 250);
 
 		JLabel text = new JLabel("ÕËºÅ");
-		text.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 16));
+		text.setFont(new Font("ËÎÌå", Font.BOLD, 16));
 		text.setBounds(135, 85, 80, 20);
 
 		JTextField inText = new JTextField(20);
-		inText.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 16));
+		inText.setFont(new Font("ËÎÌå", Font.BOLD, 16));
 		inText.setText("admin");
 		inText.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));
 		inText.setBounds(180, 85, 200, 20);
 
 		JLabel psw = new JLabel("ÃÜÂë");
-		psw.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 16));
+		psw.setFont(new Font("ËÎÌå", Font.BOLD, 16));
 		psw.setBounds(135, 115, 80, 20);
 
 		JPasswordField inPsw = new JPasswordField();
 		inPsw.setColumns(20);
-		inPsw.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 16));
+		inPsw.setFont(new Font("ËÎÌå", Font.BOLD, 16));
 		inPsw.setEchoChar('*');
 		inPsw.setBorder(BorderFactory.createLineBorder(new Color(255, 202, 24)));
 		inPsw.setBounds(180, 115, 200, 20);
 
 		JButton submit = new JButton("µÇÂ¼");
-		submit.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+		submit.setFont(new Font("ËÎÌå", Font.BOLD, 20));
 		submit.setBorderPainted(false);
 		submit.setBackground(new Color(255, 250, 250));
 		submit.setBounds(230, 160, 80, 20);

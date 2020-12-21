@@ -15,16 +15,16 @@ public class MenuItemPanel extends JPanel {
         setLayout(new BorderLayout());
         Inner2.setLayout(new GridLayout(1, 2));
         textBtn.setText(id + " " + name + " Ê£Óà:");
-        textBtn.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 15));
+        textBtn.setFont(new Font("ËÎÌå", Font.BOLD, 15));
         textBtn.setBorderPainted(false);
         textBtn.setBackground(new Color(230, 250, 250));
         textBtn.setPreferredSize(new Dimension(210, 70));
 
         capacityTxt.setText(capacity + "");
-        capacityTxt.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 15));
+        capacityTxt.setFont(new Font("ËÎÌå", Font.BOLD, 15));
 
         unSetBtn.setText("Í£ÊÛ");
-        unSetBtn.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 15));
+        unSetBtn.setFont(new Font("ËÎÌå", Font.BOLD, 15));
 
         Inner2.add(capacityTxt);
         Inner2.add(unSetBtn);

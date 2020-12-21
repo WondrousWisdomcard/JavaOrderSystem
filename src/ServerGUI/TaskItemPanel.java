@@ -18,7 +18,7 @@ public class TaskItemPanel extends JPanel {
         String str = getStrContent(plist);
 
         content.setText(str);
-        content.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 10));
+        content.setFont(new Font("ËÎÌå", Font.BOLD, 10));
         content.setBackground(new Color(230, 250, 250));
 
         left.add(content);
@@ -27,14 +27,14 @@ public class TaskItemPanel extends JPanel {
         right.setLayout(new BorderLayout());
 
         accept.setText("½Óµ¥");
-        accept.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 10));
+        accept.setFont(new Font("ËÎÌå", Font.BOLD, 10));
         accept.setBorderPainted(true);
         accept.setBackground(new Color(0, 225, 127));
         accept.setPreferredSize(new Dimension(70, 70));
         right.add(accept, BorderLayout.NORTH);
 
         accept.setText("¾Ü¾ø");
-        accept.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 10));
+        accept.setFont(new Font("ËÎÌå", Font.BOLD, 10));
         accept.setBorderPainted(true);
         accept.setBackground(new Color(255, 69, 0));
         accept.setPreferredSize(new Dimension(70, 70));

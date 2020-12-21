@@ -158,6 +158,7 @@ class OperatorInterface extends JFrame {
 					String Snum = Integer.toString(orderForm[i].num);
 					orderForm[i].jnum.setText(Snum);
 					countPrice += orderForm[i].price;
+					ep.setCountPrice(countPrice);
 					sign = 1;
 				}
 			}
