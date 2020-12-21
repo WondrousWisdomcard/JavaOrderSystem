@@ -10,7 +10,7 @@ public class TopPanel extends JPanel {
 
 	public TopPanel() {
 		setLayout(new BorderLayout());
-		setBackground(new Color(240,230,140));
+		setBackground(new Color(255,255,240));
 		setPreferredSize(new Dimension(1000,100));
 		JLabel top = new JLabel("潮汕火锅点餐系统",JLabel.CENTER);
 		top.setFont(new Font("宋体", Font.BOLD, 55));
