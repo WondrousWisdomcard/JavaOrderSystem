@@ -191,38 +191,26 @@ public class ServerOperatorInterface extends JFrame {
 		for (int i = 0; i < cp.j0.size; i++) {
 			String j = (String) iter0.next();// 对每个菜系页面的具体菜品的展示按钮添加监听
 			cuisine = wh.get(s[0]).get(j);
-			// cp.j0.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < cp.j1.size; i++) {
 			String j = (String) iter1.next();
 			cuisine = wh.get(s[1]).get(j);
-			// cp.j1.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < cp.j2.size; i++) {
 			String j = (String) iter2.next();
 			cuisine = wh.get(s[2]).get(j);
-			// cp.j2.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < cp.j3.size; i++) {
 			String j = (String) iter3.next();
 			cuisine = wh.get(s[3]).get(j);
-			// cp.j3.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < cp.j4.size; i++) {
 			String j = (String) iter4.next();
 			cuisine = wh.get(s[4]).get(j);
-			// cp.j4.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < cp.j5.size; i++) {
 			String j = (String) iter5.next();
 			cuisine = wh.get(s[5]).get(j);
-			// cp.j2.mip[i].textBtn.addActionListener(new
-			// ImgAction(cuisine.getname(),cuisine.getprice(),cuisine.getID()));
 		}
 		for (int i = 0; i < wp.getComponentCount(); i++)// 对左栏的按钮添加动作监听
 		{

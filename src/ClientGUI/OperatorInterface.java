@@ -214,7 +214,6 @@ public class OperatorInterface extends JFrame {
 				}
 			}
 			if (btn.getText().equals("撤销")) {
-				System.out.println("撤销");
 				orderForm[i].setNum(1);// 点击取消时使得数字恢复1
 				orderForm[i].setName("无");
 				orderForm[i].setPrice(0.0);
@@ -268,10 +267,11 @@ public class OperatorInterface extends JFrame {
 
 						pcc.printFile(Integer.valueOf(ep.jpnum.getText()), countPrice);
 						pcc.setString();
-						//temp = pcc;
+						
+						temp = pcc;
 
-						ServerOperatorInterface soi = new ServerOperatorInterface();
-						soi.newTask(pcc);
+						//ServerOperatorInterface soi = new ServerOperatorInterface();
+						//soi.newTask(pcc);
 
 						for (int i = 0; i < orderForm.length; i++) {
 							orderForm[i].setVisible(false);
