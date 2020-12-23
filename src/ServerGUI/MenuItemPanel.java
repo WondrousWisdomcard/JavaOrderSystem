@@ -44,6 +44,9 @@ public class MenuItemPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 capacity = capacityTxt.getText().equals("") ? 0 : Integer.valueOf(capacityTxt.getText());
                 capacityTxt.setText(capacity + "");
+
+                //∞—cap¥Êªÿ»•
+
                 confirmBtn.setBackground(new Color(230, 250, 250));
             } 
         });

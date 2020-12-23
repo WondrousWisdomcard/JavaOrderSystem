@@ -7,11 +7,23 @@ import java.util.*;
 
 public class PurchaseCuisines extends ArrayList<HasCuisine> {// 顾客已购买菜品
 
+	public String context = new String();
+
 	public boolean addCuisine(HasCuisine hasc) {
 		if (add(hasc))
 			return true;
 		else
 			return false;
+	}
+
+	public void setString(){
+		String s = new String();
+        for (int i = 0; i < size(); i++) {
+            s += (get(i).getname() + " " + get(i).getprice() + "x" + get(i).getnum() + " "
+                    + get(i).getAmountPrice()) + "\n";
+        }
+		context = s;
+		System.out.println(context);
 	}
 
 	public void printFile(int peoples, double amount) {
@@ -36,16 +48,10 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> {// 顾客已购买菜品
 			buf.write(time1.format(date));
 			buf.close();
 			out.close();
-			for (int i = 0; i < size(); i++) {
-				get(i).setname("");
-				get(i).setprice(0);
-				get(i).setnum(0);
-				get(i).setAmountPrice(0);
-			}
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
-	
 }

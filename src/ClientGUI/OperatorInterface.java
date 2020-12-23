@@ -8,8 +8,9 @@ import java.util.Iterator;
 import javax.swing.*;
 
 import Database.*;
+import ServerGUI.ServerOperatorInterface;
 
-class OperatorInterface extends JFrame {
+public class OperatorInterface extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,8 +21,13 @@ class OperatorInterface extends JFrame {
 	public EastPanel ep = new EastPanel();
 	public ListItemPanel[] orderForm = new ListItemPanel[30];// 点单列表
 	public double countPrice = 0.0;// 总价
-	public PurchaseCuisines pcc;// 已购买菜品集合
+	public PurchaseCuisines pcc = new PurchaseCuisines();// 已购买菜品集合
 	public int num = 0;// 人数初始值
+	public PurchaseCuisines temp = new PurchaseCuisines();
+
+	public PurchaseCuisines getMessage(){
+		return temp;
+	}
 
 	public OperatorInterface() {
 		setBounds(180, 10, 1200, 800);
@@ -259,7 +265,13 @@ class OperatorInterface extends JFrame {
 								pcc.add(new HasCuisine(orderForm[j].name, orderForm[j].num, orderForm[j].price));
 						}
 						k.setText("打单成功！");
+
 						pcc.printFile(Integer.valueOf(ep.jpnum.getText()), countPrice);
+						pcc.setString();
+						//temp = pcc;
+
+						ServerOperatorInterface soi = new ServerOperatorInterface();
+						soi.newTask(pcc);
 
 						for (int i = 0; i < orderForm.length; i++) {
 							orderForm[i].setVisible(false);
@@ -286,6 +298,9 @@ class OperatorInterface extends JFrame {
 					orderForm[i].setNum(1);
 				}
 				ep.setCountPrice(0.0);
+				ep.jpnum.setText("0");
+				countPrice = 0.0;
+				num = 0;
 			}
 		}// end if
 	}// end ActionPerformed
@@ -293,7 +308,6 @@ class OperatorInterface extends JFrame {
 	public static void main(String[] args) {
 
 		OperatorInterface a = new OperatorInterface();
-
 		a.ep.confirm_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog result = new JDialog(a, "下单反馈", true);
