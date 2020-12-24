@@ -1,14 +1,17 @@
 package ClientGUI;
 
+import ServerGUI.ServerOperatorInterface;
+
 import java.awt.*;
 
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.*;
 import java.util.Iterator;
 
 import javax.swing.*;
 
 import Database.*;
-import ServerGUI.ServerOperatorInterface;
 
 public class OperatorInterface extends JFrame {
 
@@ -284,6 +287,7 @@ public class OperatorInterface extends JFrame {
 						ep.jpnum.setText("0");
 						countPrice = 0.0;
 						num = 0;
+						pcc = new PurchaseCuisines();
 					}
 				} catch (Exception r) {
 					k.setText("您尚未点单," + '\n' + "或用餐人数填写异常！");
@@ -305,17 +309,41 @@ public class OperatorInterface extends JFrame {
 		}// end if
 	}// end ActionPerformed
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws UnknownHostException, IOException {
+	
 		OperatorInterface a = new OperatorInterface();
+		
 		a.ep.confirm_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				InetAddress host = null;
+				try {
+					host = InetAddress.getLocalHost();
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+				}
+				Socket client = null;
+				try {
+					client = new Socket(host.getHostName(), 9876);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+				String name = client.getLocalAddress().toString()+":"+client.getLocalPort();
+
+				System.out.println(name);
+
+		        //客户端发送
+		        new Thread(new Send(client,a.getMessage())).start();
+		        //客户端接收
+		        new Thread(new Receive(client)).start();
+				
 				JDialog result = new JDialog(a, "下单反馈", true);
 				result.setBounds(600, 400, 200, 100);
 				result.setLayout(new FlowLayout(1));
 				JLabel j = new JLabel("下单成功!");
 				j.setFont(new Font("宋体", Font.BOLD, 20));
-				result.add(j);
+				result.add(j); 
 				result.setVisible(true);
 			}
 		});

@@ -1,16 +1,17 @@
 package ServerGUI;
 
+import java.util.List;
 import java.awt.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Iterator;
-
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import javax.swing.*;
-
 import Database.*;
 
 public class ServerOperatorInterface extends JFrame {
+
+	private static final long serialVersionUID = 1L;
 
 	Warehouse wh = new Warehouse();
 	CenterPanel cp = new CenterPanel(wh); // 中间显示所有菜
@@ -19,150 +20,279 @@ public class ServerOperatorInterface extends JFrame {
 	EastPanel ep = new EastPanel(); // 客户订单接收
 	public TaskItemPanel[] orderForm = new TaskItemPanel[30];
 
+	private ObjectOutputStream oos = null;
+	private ObjectInputStream ois = null;
+	private List<MyChannel> all = new ArrayList<MyChannel>();// 通道链表，其中一个通道对应连接了一个客户
+	public PurchaseCuisines pcc = new PurchaseCuisines();
+
+	public void start() throws IOException {
+		ServerSocket server = new ServerSocket(9876);// 定义服务端
+		while (true) {// 不断监听是否有连接请求
+			Socket client = server.accept();
+			MyChannel channel = new MyChannel(client);
+			all.add(channel);
+			new Thread(channel).start(); // 一条道路
+		}
+	}
+
+	/**
+	 * 一个客户一条道路 建立服务器与客户端之间的数据通道
+	 */
+	private class MyChannel implements Runnable {
+
+		private ObjectOutputStream oos;
+		private ObjectInputStream ois;
+		private String name;
+
+		public MyChannel(Socket client) {
+			try {
+				oos = new ObjectOutputStream(client.getOutputStream());
+				ois = new ObjectInputStream(client.getInputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// 接收客户端的信息
+		private String receive() throws ClassNotFoundException {
+			String makesureString = null;
+
+			try {
+				pcc = (PurchaseCuisines) ois.readObject();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			}
+			// 可以在这里加监听器弹出顾客已点菜单？
+			// 然后返回YES或NO
+			return makesureString;
+		}
+
+		// 向客户端发送信息
+		private void send(String msg) {
+			try {
+				oos.writeObject(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					if (receive() == "YES") {
+						send("接单成功");
+					} else {
+						send("接单失败");
+					}
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public void newTask(PurchaseCuisines plist) {
 
 		orderForm[0] = new TaskItemPanel(plist);
-		ep.order_list.add(orderForm[0]);// 将任务加入右框
-		
-		orderForm[0].refuse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				ep.order_list.setVisible(false);
 
-				JDialog result = new JDialog();
-				result.setBounds(600, 400, 350, 100);
-				result.setLayout(new FlowLayout(1));
-				JLabel k = new JLabel();
-				k.setFont(new Font("宋体", Font.BOLD, 20));
-				k.setText("拒绝成功！");
-				result.add(k);
-				result.setVisible(true);
-				
+		ep.order_list.add(orderForm[0]);// 将任务加入右框
+		ep.order_list.setVisible(true);
+
+		orderForm[0].refuse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// ep.order_list.setVisible(false);
+				if (orderForm[0].refuse.getText() != "已拒绝" && orderForm[0].accept.getText() != ""
+						&& orderForm[0].refuse.getText() != "" && orderForm[0].accept.getText() != "已接单"
+						&& orderForm[0].accept.getText() != "接单失败") {
+					orderForm[0].refuse.setText("已拒绝");
+					orderForm[0].refuse.setBackground(new Color(255, 255, 240));
+					orderForm[0].accept.setText("");
+					orderForm[0].accept.setBackground(new Color(255, 255, 240));
+					orderForm[0].accept.setEnabled(false);
+					orderForm[0].refuse.setEnabled(false);
+
+					JDialog result = new JDialog();
+					result.setBounds(600, 400, 350, 100);
+					result.setLayout(new FlowLayout(1));
+					JLabel k = new JLabel();
+					k.setFont(new Font("宋体", Font.BOLD, 20));
+					k.setText("拒绝成功！");
+					result.add(k);
+					result.setVisible(true);
+				}
 			}
 		});
 		orderForm[0].accept.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				ep.order_list.setVisible(false);
+			public void actionPerformed(ActionEvent e) {
+				if (orderForm[0].refuse.getText() != "已拒绝" && orderForm[0].accept.getText() != ""
+						&& orderForm[0].refuse.getText() != "" && orderForm[0].accept.getText() != "已接单"
+						&& orderForm[0].accept.getText() != "接单失败") {
 
-				for(int k = 0; k < plist.size(); k++){
-					String name = plist.get(k).getname();
-					int num = plist.get(k).getnum();
-					
-					Iterator<String> iter0 = wh.get("pot_bottom").keySet().iterator();
-					Iterator<String> iter1 = wh.get("meat").keySet().iterator();
-					Iterator<String> iter2 = wh.get("vegetable").keySet().iterator();
-					Iterator<String> iter3 = wh.get("snack").keySet().iterator();
-					Iterator<String> iter4 = wh.get("drink").keySet().iterator();
-					Iterator<String> iter5 = wh.get("staplefood").keySet().iterator();
+					orderForm[0].accept.setText("已接单");
+					orderForm[0].refuse.setBackground(new Color(255, 255, 240));
+					orderForm[0].refuse.setText("");
+					orderForm[0].accept.setBackground(new Color(255, 255, 240));
+					orderForm[0].accept.setEnabled(false);
+					orderForm[0].refuse.setEnabled(false);
 
-					Cuisine cuisine;
-					JDialog result2 = new JDialog();
-					result2.setBounds(600, 400, 350, 100);
-					result2.setLayout(new FlowLayout(1));
-					JLabel k2 = new JLabel();
-					k2.setFont(new Font("宋体", Font.BOLD, 20));
-					k2.setText(name + "库存不足");
-					result2.add(k2);
-					result2.setVisible(false);
+					for (int k = 0; k < plist.size(); k++) {
+						String name = plist.get(k).getname();
+						int num = plist.get(k).getnum();
+
+						Iterator<String> iter0 = wh.get("pot_bottom").keySet().iterator();
+						Iterator<String> iter1 = wh.get("meat").keySet().iterator();
+						Iterator<String> iter2 = wh.get("vegetable").keySet().iterator();
+						Iterator<String> iter3 = wh.get("snack").keySet().iterator();
+						Iterator<String> iter4 = wh.get("drink").keySet().iterator();
+						Iterator<String> iter5 = wh.get("staplefood").keySet().iterator();
+
+						Cuisine cuisine;
+						JDialog result2 = new JDialog();
+						result2.setBounds(600, 400, 350, 100);
+						result2.setLayout(new FlowLayout(1));
+						JLabel k2 = new JLabel();
+						k2.setFont(new Font("宋体", Font.BOLD, 20));
+						k2.setText(name + "库存不足");
+						result2.add(k2);
+						result2.setVisible(false);
 
 						for (int i = 0; i < cp.j0.size; i++) {
 							String j = (String) iter0.next();
 							cuisine = wh.get("pot_bottom").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j0.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j0.mip[i].capacity = n;
 									cp.j0.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
 						}
 						for (int i = 0; i < cp.j1.size; i++) {
 							String j = (String) iter1.next();
 							cuisine = wh.get("meat").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j1.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j1.mip[i].capacity = n;
 									cp.j1.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
 						}
 						for (int i = 0; i < cp.j2.size; i++) {
 							String j = (String) iter2.next();
 							cuisine = wh.get("vegetable").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j2.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j2.mip[i].capacity = n;
 									cp.j2.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
 						}
 						for (int i = 0; i < cp.j3.size; i++) {
 							String j = (String) iter3.next();
 							cuisine = wh.get("snack").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j3.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j3.mip[i].capacity = n;
 									cp.j3.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
 						}
 						for (int i = 0; i < cp.j4.size; i++) {
 							String j = (String) iter4.next();
 							cuisine = wh.get("drink").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j4.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j4.mip[i].capacity = n;
 									cp.j4.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
 						}
 						for (int i = 0; i < cp.j5.size; i++) {
 							String j = (String) iter5.next();
 							cuisine = wh.get("staplefood").get(j);
-							if(cuisine.getname() == name){
+							if (cuisine.getname() == name) {
 								int n = cp.j5.mip[i].capacity - num;
-								if(n >= 0){
+								if (n >= 0) {
 									cp.j5.mip[i].capacity = n;
 									cp.j5.mip[i].capacityTxt.setText(n + "");
-								}
-								else{
+								} else {
 									result2.setVisible(true);
+									orderForm[0].accept.setText("接单失败");
+									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+									orderForm[0].refuse.setText("");
+									orderForm[0].accept.setBackground(new Color(255, 192, 203));
+									orderForm[0].accept.setEnabled(false);
+									orderForm[0].refuse.setEnabled(false);
+									return;
 								}
 							}
-						} 	
+						}
+					}
+					JDialog result = new JDialog();
+					result.setBounds(600, 400, 350, 100);
+					result.setLayout(new FlowLayout(1));
+					JLabel k = new JLabel();
+					k.setFont(new Font("宋体", Font.BOLD, 20));
+					k.setText("接单成功！");
+					result.add(k);
+					result.setVisible(true);
 				}
-
-				JDialog result = new JDialog();
-				result.setBounds(600, 400, 350, 100);
-				result.setLayout(new FlowLayout(1));
-				JLabel k = new JLabel();
-				k.setFont(new Font("宋体", Font.BOLD, 20));
-				k.setText("接单成功！");
-				result.add(k);
-				result.setVisible(true);
-				
 			}
 		});
 	}
-	
+
 	public ServerOperatorInterface() {
 		setBounds(180, 10, 1200, 800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -236,6 +366,7 @@ public class ServerOperatorInterface extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
+
 			JButton jb = (JButton) e.getSource();
 			if (jb.getText().equals("   锅 底 类   "))
 				card.show(jp, "a0");
@@ -252,7 +383,8 @@ public class ServerOperatorInterface extends JFrame {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		ServerOperatorInterface a = new ServerOperatorInterface();
+		a.start();
 	}
 }

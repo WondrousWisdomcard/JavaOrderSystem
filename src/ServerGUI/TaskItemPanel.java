@@ -18,12 +18,14 @@ public class TaskItemPanel extends JPanel {
         //System.out.println(str);
 
         content.setText(str);
+        content.setLineWrap(true);
+        //content.setPreferredSize(new Dimension(300, 100));
         content.setFont(new Font("ËÎÌו", Font.BOLD, 16));
         content.setBackground(new Color(240, 250, 250));
         content.setEditable(false);
-        
-        left.add(content);
-        add(left, BorderLayout.NORTH);
+
+        JScrollPane js = new JScrollPane(content);
+        add(js, BorderLayout.NORTH);
 
         right.setLayout(new BorderLayout());
 

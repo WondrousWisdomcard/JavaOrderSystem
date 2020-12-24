@@ -30,11 +30,10 @@ public class OrderSystemTest {
 				JLabel j = new JLabel("下单成功!");
 				j.setFont(new Font("宋体", Font.BOLD, 20));
 				result.add(j);
-        result.setVisible(true);
+        		result.setVisible(true);
 
 			}
 		});
     
-
 	}// end main
 }

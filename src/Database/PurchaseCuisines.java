@@ -5,8 +5,9 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class PurchaseCuisines extends ArrayList<HasCuisine> {// 顾客已购买菜品
+public class PurchaseCuisines extends ArrayList<HasCuisine> implements Serializable {// 顾客已购买菜品
 
+	private static final long serialVersionUID = 1L;
 	public String context = new String();
 
 	public boolean addCuisine(HasCuisine hasc) {

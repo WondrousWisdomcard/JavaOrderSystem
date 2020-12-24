@@ -1,6 +1,11 @@
 package Database;
 
-public class HasCuisine extends Cuisine {
+import java.io.Serializable;
+
+public class HasCuisine extends Cuisine implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	private int num;
 	private double price;
