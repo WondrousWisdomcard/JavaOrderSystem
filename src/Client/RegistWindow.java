@@ -19,13 +19,13 @@ import java.io.OutputStreamWriter;
 public class RegistWindow extends JFrame{
 	public RegistWindow() {
 		setTitle("注册");
-		setBounds(450, 300, 580, 250);
+		setBounds(450, 350, 500, 300);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		Container c = getContentPane();
 		c.setBackground(new Color(255, 255, 240));
 		c.setLayout(null);// 绝对布局
-		
+
 		JLabel registWord = new JLabel("新账号");
 		registWord.setFont(new Font("宋体", Font.BOLD, 16));
 		registWord.setBounds(75, 85, 80, 20);
@@ -57,10 +57,10 @@ public class RegistWindow extends JFrame{
 		inTextCodeCorrect.setBounds(180, 145, 200, 20);
 		
 		JButton registion = new JButton("确认");
-		registion.setFont(new Font("宋体", Font.BOLD, 24));
+		registion.setFont(new Font("宋体", Font.BOLD, 20));
 		registion.setBorderPainted(false);
 		registion.setBackground(new Color(255, 255, 224));
-		registion.setBounds(170, 160, 100, 40);
+		registion.setBounds(200, 180, 80, 60);
 		
 		registion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
