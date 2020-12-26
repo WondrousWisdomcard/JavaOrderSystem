@@ -14,14 +14,16 @@ public class ServerOperatorInterface extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	Warehouse wh = new Warehouse();
-	CenterPanel cp = new CenterPanel(wh); // 中间显示所有菜
+	CenterPanel cp = new CenterPanel(wh);
 	TopPanel tp = new TopPanel();
 	WestPanel wp = new WestPanel(); // 菜系列表
 	EastPanel ep = new EastPanel(); // 客户订单接收
 	public TaskItemPanel[] orderForm = new TaskItemPanel[30];
 
-	private ObjectOutputStream oos = null;
-	private ObjectInputStream ois = null;
+	int sign = -1; // 拒绝或者接受信号
+	int enable = 0;
+	int orderNum = 1000;
+
 	private List<MyChannel> all = new ArrayList<MyChannel>();// 通道链表，其中一个通道对应连接了一个客户
 	public PurchaseCuisines pcc = new PurchaseCuisines();
 
@@ -30,8 +32,11 @@ public class ServerOperatorInterface extends JFrame {
 		while (true) {// 不断监听是否有连接请求
 			Socket client = server.accept();
 			MyChannel channel = new MyChannel(client);
-			all.add(channel);
-			new Thread(channel).start(); // 一条道路
+			if (!all.contains(channel)) {
+				all.add(channel);
+				new Thread(channel).start(); // 一条道路
+			}
+
 		}
 	}
 
@@ -42,7 +47,6 @@ public class ServerOperatorInterface extends JFrame {
 
 		private ObjectOutputStream oos;
 		private ObjectInputStream ois;
-		private String name;
 
 		public MyChannel(Socket client) {
 			try {
@@ -54,19 +58,20 @@ public class ServerOperatorInterface extends JFrame {
 		}
 
 		// 接收客户端的信息
-		private String receive() throws ClassNotFoundException {
-			String makesureString = null;
-
+		private boolean receive() throws ClassNotFoundException {
 			try {
 				pcc = (PurchaseCuisines) ois.readObject();
-
+				if (!pcc.isEmpty()) {
+					System.out.println("New Cuisine:");
+					newTask(pcc);
+					return true;
+				} else {
+					return false;
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
-
 			}
-			// 可以在这里加监听器弹出顾客已点菜单？
-			// 然后返回YES或NO
-			return makesureString;
+			return false;
 		}
 
 		// 向客户端发送信息
@@ -82,10 +87,20 @@ public class ServerOperatorInterface extends JFrame {
 		public void run() {
 			while (true) {
 				try {
-					if (receive() == "YES") {
-						send("接单成功");
-					} else {
-						send("接单失败");
+					boolean i = receive();
+					while (i) {
+						if (enable == 1) {
+							if (sign == 1) {
+								System.out.println("Server Reaction: YES");
+								send("Y" + orderNum);
+							} else if (sign == 0) {
+								System.out.println("Server Reaction: NO");
+								send("N" + orderNum);
+							}
+							enable = 0;
+							sign = -1;
+							orderNum++;
+						}
 					}
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -94,203 +109,242 @@ public class ServerOperatorInterface extends JFrame {
 		}
 	}
 
-	public void newTask(PurchaseCuisines plist) {
+	public void underStockAction() {
+		orderForm[0].accept.setText("接单失败");
+		orderForm[0].refuse.setBackground(new Color(255, 192, 203));
+		orderForm[0].refuse.setText("");
+		orderForm[0].accept.setBackground(new Color(255, 192, 203));
+		orderForm[0].accept.setEnabled(false);
+		orderForm[0].refuse.setEnabled(false);
+		sign = 0;
+		enable = 1;
+	}
 
+	public void newTask(PurchaseCuisines plist) {
 		orderForm[0] = new TaskItemPanel(plist);
 
 		ep.order_list.add(orderForm[0]);// 将任务加入右框
+		ep.order_list.setVisible(false);
 		ep.order_list.setVisible(true);
 
 		orderForm[0].refuse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ep.order_list.setVisible(false);
-				if (orderForm[0].refuse.getText() != "已拒绝" && orderForm[0].accept.getText() != ""
-						&& orderForm[0].refuse.getText() != "" && orderForm[0].accept.getText() != "已接单"
-						&& orderForm[0].accept.getText() != "接单失败") {
-					orderForm[0].refuse.setText("已拒绝");
-					orderForm[0].refuse.setBackground(new Color(255, 255, 240));
-					orderForm[0].accept.setText("");
-					orderForm[0].accept.setBackground(new Color(255, 255, 240));
-					orderForm[0].accept.setEnabled(false);
-					orderForm[0].refuse.setEnabled(false);
-
-					JDialog result = new JDialog();
-					result.setBounds(600, 400, 350, 100);
-					result.setLayout(new FlowLayout(1));
-					JLabel k = new JLabel();
-					k.setFont(new Font("宋体", Font.BOLD, 20));
-					k.setText("拒绝成功！");
-					result.add(k);
-					result.setVisible(true);
-				}
+				orderForm[0].refuse.setText("已拒绝");
+				orderForm[0].refuse.setBackground(new Color(255, 255, 240));
+				orderForm[0].accept.setText("");
+				orderForm[0].accept.setBackground(new Color(255, 255, 240));
+				orderForm[0].accept.setEnabled(false);
+				orderForm[0].refuse.setEnabled(false);
+				sign = 0;
+				enable = 1;
 			}
 		});
 		orderForm[0].accept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (orderForm[0].refuse.getText() != "已拒绝" && orderForm[0].accept.getText() != ""
-						&& orderForm[0].refuse.getText() != "" && orderForm[0].accept.getText() != "已接单"
-						&& orderForm[0].accept.getText() != "接单失败") {
 
-					orderForm[0].accept.setText("已接单");
-					orderForm[0].refuse.setBackground(new Color(255, 255, 240));
-					orderForm[0].refuse.setText("");
-					orderForm[0].accept.setBackground(new Color(255, 255, 240));
-					orderForm[0].accept.setEnabled(false);
-					orderForm[0].refuse.setEnabled(false);
+				for (int k = 0; k < plist.size(); k++) {
+					Iterator<String> iter0 = wh.get("pot_bottom").keySet().iterator();
+					Iterator<String> iter1 = wh.get("meat").keySet().iterator();
+					Iterator<String> iter2 = wh.get("vegetable").keySet().iterator();
+					Iterator<String> iter3 = wh.get("snack").keySet().iterator();
+					Iterator<String> iter4 = wh.get("drink").keySet().iterator();
+					Iterator<String> iter5 = wh.get("staplefood").keySet().iterator();
 
-					for (int k = 0; k < plist.size(); k++) {
-						String name = plist.get(k).getname();
-						int num = plist.get(k).getnum();
+					String name = plist.get(k).getname();
+					int num = plist.get(k).getnum();
+					Cuisine cuisine;
 
-						Iterator<String> iter0 = wh.get("pot_bottom").keySet().iterator();
-						Iterator<String> iter1 = wh.get("meat").keySet().iterator();
-						Iterator<String> iter2 = wh.get("vegetable").keySet().iterator();
-						Iterator<String> iter3 = wh.get("snack").keySet().iterator();
-						Iterator<String> iter4 = wh.get("drink").keySet().iterator();
-						Iterator<String> iter5 = wh.get("staplefood").keySet().iterator();
+					JDialog result2 = new JDialog();
+					result2.setTitle("火锅点餐管理系统");
+					result2.setBounds(600, 400, 350, 100);
+					result2.setLayout(new FlowLayout(1));
+					JLabel k2 = new JLabel();
+					k2.setFont(new Font("宋体", Font.BOLD, 20));
+					k2.setText(name + "库存不足");
+					result2.add(k2);
+					result2.setVisible(false);
 
-						Cuisine cuisine;
-						JDialog result2 = new JDialog();
-						result2.setBounds(600, 400, 350, 100);
-						result2.setLayout(new FlowLayout(1));
-						JLabel k2 = new JLabel();
-						k2.setFont(new Font("宋体", Font.BOLD, 20));
-						k2.setText(name + "库存不足");
-						result2.add(k2);
-						result2.setVisible(false);
-
-						for (int i = 0; i < cp.j0.size; i++) {
-							String j = (String) iter0.next();
-							cuisine = wh.get("pot_bottom").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j0.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j0.mip[i].capacity = n;
-									cp.j0.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
-							}
-						}
-						for (int i = 0; i < cp.j1.size; i++) {
-							String j = (String) iter1.next();
-							cuisine = wh.get("meat").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j1.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j1.mip[i].capacity = n;
-									cp.j1.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
-							}
-						}
-						for (int i = 0; i < cp.j2.size; i++) {
-							String j = (String) iter2.next();
-							cuisine = wh.get("vegetable").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j2.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j2.mip[i].capacity = n;
-									cp.j2.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
-							}
-						}
-						for (int i = 0; i < cp.j3.size; i++) {
-							String j = (String) iter3.next();
-							cuisine = wh.get("snack").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j3.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j3.mip[i].capacity = n;
-									cp.j3.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
-							}
-						}
-						for (int i = 0; i < cp.j4.size; i++) {
-							String j = (String) iter4.next();
-							cuisine = wh.get("drink").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j4.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j4.mip[i].capacity = n;
-									cp.j4.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
-							}
-						}
-						for (int i = 0; i < cp.j5.size; i++) {
-							String j = (String) iter5.next();
-							cuisine = wh.get("staplefood").get(j);
-							if (cuisine.getname() == name) {
-								int n = cp.j5.mip[i].capacity - num;
-								if (n >= 0) {
-									cp.j5.mip[i].capacity = n;
-									cp.j5.mip[i].capacityTxt.setText(n + "");
-								} else {
-									result2.setVisible(true);
-									orderForm[0].accept.setText("接单失败");
-									orderForm[0].refuse.setBackground(new Color(255, 192, 203));
-									orderForm[0].refuse.setText("");
-									orderForm[0].accept.setBackground(new Color(255, 192, 203));
-									orderForm[0].accept.setEnabled(false);
-									orderForm[0].refuse.setEnabled(false);
-									return;
-								}
+					for (int i = 0; i < cp.j0.size; i++) {
+						String j = (String) iter0.next();
+						cuisine = wh.get("pot_bottom").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j0.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
 							}
 						}
 					}
-					JDialog result = new JDialog();
-					result.setBounds(600, 400, 350, 100);
-					result.setLayout(new FlowLayout(1));
-					JLabel k = new JLabel();
-					k.setFont(new Font("宋体", Font.BOLD, 20));
-					k.setText("接单成功！");
-					result.add(k);
-					result.setVisible(true);
+
+					for (int i = 0; i < cp.j1.size; i++) {
+						String j = (String) iter1.next();
+						cuisine = wh.get("meat").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j1.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
+							}
+						}
+					}
+					for (int i = 0; i < cp.j2.size; i++) {
+						String j = (String) iter2.next();
+						cuisine = wh.get("vegetable").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j2.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
+							}
+						}
+					}
+					for (int i = 0; i < cp.j3.size; i++) {
+						String j = (String) iter3.next();
+						cuisine = wh.get("snack").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j3.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
+							}
+						}
+					}
+					for (int i = 0; i < cp.j4.size; i++) {
+						String j = (String) iter4.next();
+						cuisine = wh.get("drink").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j4.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
+							}
+						}
+					}
+					for (int i = 0; i < cp.j5.size; i++) {
+						String j = (String) iter5.next();
+						cuisine = wh.get("staplefood").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j5.mip[i].capacity - num;
+							if (n < 0) {
+								result2.setVisible(true);
+								underStockAction();
+								return;
+							}
+						}
+					}
 				}
+
+				for (int k = 0; k < plist.size(); k++) {
+
+					Iterator<String> iter0 = wh.get("pot_bottom").keySet().iterator();
+					Iterator<String> iter1 = wh.get("meat").keySet().iterator();
+					Iterator<String> iter2 = wh.get("vegetable").keySet().iterator();
+					Iterator<String> iter3 = wh.get("snack").keySet().iterator();
+					Iterator<String> iter4 = wh.get("drink").keySet().iterator();
+					Iterator<String> iter5 = wh.get("staplefood").keySet().iterator();
+
+					String name = plist.get(k).getname();
+					int num = plist.get(k).getnum();
+
+					Cuisine cuisine;
+
+					for (int i = 0; i < cp.j0.size; i++) {
+						String j = (String) iter0.next();
+						cuisine = wh.get("pot_bottom").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j0.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j0.mip[i].capacity = n;
+								cp.j0.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+					for (int i = 0; i < cp.j1.size; i++) {
+						String j = (String) iter1.next();
+						cuisine = wh.get("meat").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j1.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j1.mip[i].capacity = n;
+								cp.j1.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+					for (int i = 0; i < cp.j2.size; i++) {
+						String j = (String) iter2.next();
+						cuisine = wh.get("vegetable").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j2.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j2.mip[i].capacity = n;
+								cp.j2.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+					for (int i = 0; i < cp.j3.size; i++) {
+						String j = (String) iter3.next();
+						cuisine = wh.get("snack").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j3.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j3.mip[i].capacity = n;
+								cp.j3.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+					for (int i = 0; i < cp.j4.size; i++) {
+						String j = (String) iter4.next();
+						cuisine = wh.get("drink").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j4.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j4.mip[i].capacity = n;
+								cp.j4.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+					for (int i = 0; i < cp.j5.size; i++) {
+						String j = (String) iter5.next();
+						cuisine = wh.get("staplefood").get(j);
+						String name2 = cuisine.getname();
+						if (name2.equals(name)) {
+							int n = cp.j5.mip[i].capacity - num;
+							if (n >= 0) {
+								cp.j5.mip[i].capacity = n;
+								cp.j5.mip[i].capacityTxt.setText(n + "");
+							}
+						}
+					}
+				}
+
+				orderForm[0].accept.setText("已接单");
+				orderForm[0].accept.setBackground(new Color(255, 255, 240));
+				orderForm[0].refuse.setBackground(new Color(255, 255, 240));
+				orderForm[0].refuse.setText("");
+				orderForm[0].accept.setEnabled(false);
+				orderForm[0].refuse.setEnabled(false);
+
+				sign = 1;
+				enable = 1;
 			}
 		});
+
 	}
 
 	public ServerOperatorInterface() {

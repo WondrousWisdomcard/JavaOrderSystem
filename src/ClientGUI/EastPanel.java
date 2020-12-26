@@ -100,13 +100,13 @@ public class EastPanel extends JPanel {
 		nort.add(note, BorderLayout.NORTH);
 		nort.add(count, BorderLayout.SOUTH);
 
-		account_btn = new JButton("结 账");
+		account_btn = new JButton("确 认 订 单");
 		account_btn.setFont(new Font("宋体", Font.BOLD, 22));
 		account_btn.setForeground(Color.white);
 		account_btn.setBackground(new Color(255, 0, 0));
 		account_btn.setBorderPainted(false);
 
-		confirm_btn = new JButton("确 认 订 单");
+		confirm_btn = new JButton("结 账");
 		confirm_btn.setFont(new Font("宋体", Font.BOLD, 22));
 		confirm_btn.setForeground(Color.white);
 		confirm_btn.setBackground(new Color(255, 202, 24));

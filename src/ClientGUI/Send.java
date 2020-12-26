@@ -32,8 +32,7 @@ public class Send implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            send(pcc);
-        }
+        send(pcc);
+        pcc = new PurchaseCuisines();
     }
 }
