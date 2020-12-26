@@ -25,7 +25,7 @@ public class RegistWindow extends JFrame{
 		Container c = getContentPane();
 		c.setBackground(new Color(255, 255, 240));
 		c.setLayout(null);// 绝对布局
-		//super("注册界面");
+		
 		JLabel registWord = new JLabel("新账号");
 		registWord.setFont(new Font("宋体", Font.BOLD, 16));
 		registWord.setBounds(75, 85, 80, 20);

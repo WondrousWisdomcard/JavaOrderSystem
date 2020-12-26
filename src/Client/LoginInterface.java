@@ -15,6 +15,17 @@ import javax.swing.*;
 public class LoginInterface extends JFrame {
 	//public static FileWriter ffww;
 	public static final long serialVersionUID = 1L;
+
+	public static void main(String[] args) {
+		try {
+			//ffww =  new FileWriter("src/OurClient/OURCLIENTS.txt");
+			new LoginInterface();
+		}
+		catch(Exception e) {
+			System.out.println("Can't build file!");
+		}
+	}
+
 	public LoginInterface() {
 		setTitle("µÇÂ½");
 		setBounds(450, 300, 580, 250);
@@ -122,7 +133,7 @@ public class LoginInterface extends JFrame {
 									inPsw.requestFocus();
 								}
 								else {
-									setVisible(false);//
+									setVisible(false);
 									new OperatorInterface();
 								}
 							}
@@ -151,13 +162,5 @@ public class LoginInterface extends JFrame {
 		});
 	}
 
-	public static void main(String[] args) {
-		try {
-			//ffww =  new FileWriter("src/OurClient/OURCLIENTS.txt");
-			new LoginInterface();
-		}
-		catch(Exception e) {
-			System.out.println("Can't build file!");
-		}
-	}
+	
 }

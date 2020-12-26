@@ -27,6 +27,12 @@ public class ServerOperatorInterface extends JFrame {
 	private List<MyChannel> all = new ArrayList<MyChannel>();// 通道链表，其中一个通道对应连接了一个客户
 	public PurchaseCuisines pcc = new PurchaseCuisines();
 
+	
+	public static void main(String[] args) throws IOException {
+		ServerOperatorInterface a = new ServerOperatorInterface();
+		a.start();
+	}
+
 	public void start() throws IOException {
 		ServerSocket server = new ServerSocket(9876);// 定义服务端
 		while (true) {// 不断监听是否有连接请求
@@ -36,7 +42,6 @@ public class ServerOperatorInterface extends JFrame {
 				all.add(channel);
 				new Thread(channel).start(); // 一条道路
 			}
-
 		}
 	}
 
@@ -370,7 +375,7 @@ public class ServerOperatorInterface extends JFrame {
 	}
 
 	public ServerOperatorInterface() {
-		setBounds(180, 10, 1200, 800);
+		setBounds(180, 10, 1050, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("后台管理");
 
@@ -459,8 +464,4 @@ public class ServerOperatorInterface extends JFrame {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		ServerOperatorInterface a = new ServerOperatorInterface();
-		a.start();
-	}
 }
