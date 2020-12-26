@@ -1,17 +1,11 @@
-package ClientGUI;
-
-import ServerGUI.ServerOperatorInterface;
+package Client;
 
 import java.awt.*;
-
 import java.awt.event.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.*;
 import java.util.Iterator;
-
 import javax.swing.*;
-
 import Database.*;
 
 public class OperatorInterface extends JFrame {
@@ -28,9 +22,55 @@ public class OperatorInterface extends JFrame {
 	public PurchaseCuisines pcc = new PurchaseCuisines();// 已购买菜品集合
 	public int num = 0;// 人数初始值
 
-
 	public PurchaseCuisines getMessage() {
 		return pcc;
+	}
+
+	public void newConnect() {
+		InetAddress host = null;
+		Socket client = null;
+		try {
+			host = InetAddress.getLocalHost();
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			client = new Socket(host.getHostName(), 9876);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		String name = client.getLocalAddress().toString() + ":" + client.getLocalPort();
+		System.out.println(name);
+
+		//ep.delAll.setEnabled(false);
+		//ep.confirm_btn.setEnabled(true);
+		// 客户端发送
+		new Thread(new Send(client, getMessage())).start();
+		// 客户端接收
+		Receive rec = new Receive(client);
+		new Thread(rec).start();
+
+		/*
+		while(true){
+			System.out.println(rec.getResult());
+			if(rec.getResult() == 1){
+				System.out.println("'SURE!");
+				ep.account_btn.setEnabled(false); //确认订单
+				ep.confirm_btn.setEnabled(true); //结账
+				ep.delAll.setEnabled(false);
+				break;
+			}
+			else if(rec.getResult() == 0){
+				System.out.println("NONONO!");
+				ep.account_btn.setEnabled(true); //确认订单
+				ep.confirm_btn.setEnabled(false); //结账
+				ep.delAll.setEnabled(true);
+				break;
+			}
+		}
+		 */
 	}
 
 	public OperatorInterface() {
@@ -138,7 +178,7 @@ public class OperatorInterface extends JFrame {
 		}
 
 		ep.confirm_btn.addActionListener(new DeletionListener(1));
-		ep.confirm_btn.setEnabled(false);
+		//ep.confirm_btn.setEnabled(false);
 
 		JScrollPane jsCP = new JScrollPane(cp);
 		jsCP.setBorder(BorderFactory.createEmptyBorder());
@@ -152,7 +192,7 @@ public class OperatorInterface extends JFrame {
 		// 确 认 订 单
 		ep.account_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ep.account_btn.setEnabled(false);
+				//ep.account_btn.setEnabled(false);
 				char a = ep.jpnum.getText().charAt(0);
 				int t, count = 0;
 				for (t = 0; t < orderForm.length; t++) {
@@ -170,40 +210,15 @@ public class OperatorInterface extends JFrame {
 					k.setText("您尚未点单," + '\n' + "或用餐人数填写异常！");
 					result.add(k);
 					result.setVisible(true);
+					//ep.account_btn.setEnabled(true);
 					return;
 				}
-
 				pcc = new PurchaseCuisines();
 				for (int j = 0; j < orderForm.length; j++) {
 					if (orderForm[j].isVisible() != false)
 						pcc.add(new HasCuisine(orderForm[j].name, orderForm[j].num, orderForm[j].price));
 				}
-				InetAddress host = null;
-				Socket client = null;
-				try {
-					host = InetAddress.getLocalHost();
-				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
-				}
-		
-				try {
-					client = new Socket(host.getHostName(), 9876);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-		
-				String name = client.getLocalAddress().toString() + ":" + client.getLocalPort();
-				System.out.println(name);
-
-				ep.delAll.setEnabled(false);
-				ep.confirm_btn.setEnabled(true);
-				// 客户端发送
-				new Thread(new Send(client, getMessage())).start();
-				// 客户端接收
-				Receive rec = new Receive(client);
-				new Thread(rec).start();
-
-				
+				newConnect();
 			}
 		});
 	}
@@ -300,8 +315,8 @@ public class OperatorInterface extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			if (i == 1) {
-				ep.account_btn.setEnabled(true);
-				ep.delAll.setEnabled(true);
+				//ep.account_btn.setEnabled(true);
+				//ep.delAll.setEnabled(true);
 				pcc.printFile(Integer.valueOf(ep.jpnum.getText()), countPrice);
 				pcc.setString();
 
@@ -319,15 +334,16 @@ public class OperatorInterface extends JFrame {
 				pcc = new PurchaseCuisines();
 
 				JDialog result2 = new JDialog();
-        result2.setTitle("火锅点餐系统");
-        result2.setBounds(600, 400, 350, 100);
-        result2.setLayout(new FlowLayout(1));
-        JLabel k2 = new JLabel();
-        k2.setFont(new Font("宋体", Font.BOLD, 20));
-        k2.setText("已结账");
-        result2.add(k2);
-		result2.setVisible(true);
-		
+				result2.setTitle("火锅点餐系统");
+				result2.setBounds(600, 400, 350, 100);
+				result2.setLayout(new FlowLayout(1));
+				JLabel k2 = new JLabel();
+				k2.setFont(new Font("宋体", Font.BOLD, 20));
+				k2.setText("已结账");
+				result2.add(k2);
+				result2.setVisible(true);
+				//ep.confirm_btn.setEnabled(false);
+
 			} else {
 				for (int i = 0; i < orderForm.length; i++) {
 					orderForm[i].setVisible(false);
@@ -349,6 +365,7 @@ public class OperatorInterface extends JFrame {
 	}// end main
 
 	public void start() {
+
 	}
 
 }

@@ -1,4 +1,4 @@
-package ServerGUI;
+package Server;
 
 import java.awt.Color;
 import java.awt.Container;

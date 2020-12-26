@@ -1,4 +1,4 @@
-package ClientGUI;
+package Client;
 
 public class User {
 	public String registWord;

@@ -1,4 +1,4 @@
-package ClientGUI;
+package Client;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,9 +13,8 @@ import java.util.List;
 import javax.swing.*;
 
 public class LoginInterface extends JFrame {
-	// public static FileWriter ffww;
+	//public static FileWriter ffww;
 	public static final long serialVersionUID = 1L;
-
 	public LoginInterface() {
 		setTitle("登陆");
 		setBounds(450, 300, 580, 250);
@@ -57,7 +56,7 @@ public class LoginInterface extends JFrame {
 		submit.setBorderPainted(false);
 		submit.setBackground(new Color(255, 255, 224));
 		submit.setBounds(280, 160, 100, 40);
-
+		
 		JButton registion = new JButton("注册");
 		registion.setFont(new Font("宋体", Font.BOLD, 24));
 		registion.setBorderPainted(false);
@@ -77,54 +76,58 @@ public class LoginInterface extends JFrame {
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					User user = new User(new String(inText.getText()), new String(inPsw.getPassword()));
+					User user = new User(new String(inText.getText()),new String(inPsw.getPassword()));
 					File file = new File("src\\OurClient\\OURCLIENTS.txt");
-					// C:\Users\Administrator\eclipse-workspace\JavaOrderSystem\src\OurClient
+					//C:\Users\Administrator\eclipse-workspace\JavaOrderSystem\src\OurClient
 					System.out.println("Read in Client Text");
 					List<User> list = new ArrayList<>();
 					InputStreamReader reader = new InputStreamReader(new FileInputStream(file)); // 建立一个输入流对象reader
 					BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言
 					String line = ""; // 每一行的内容
-					/*
-					 * if (inPsw.getText().equals("admin")) { setVisible(false); new
-					 * OperatorInterface(); } else { JOptionPane.showMessageDialog(c, "密码错误");
-					 * inPsw.setText(""); inPsw.requestFocus(); }
-					 */
+					/*if (inPsw.getText().equals("admin")) {
+						setVisible(false);
+						new OperatorInterface();
+					} else {
+						JOptionPane.showMessageDialog(c, "密码错误");
+						inPsw.setText("");
+						inPsw.requestFocus();
+					}*/
 					int i = 1;
 					while ((line = br.readLine()) != null) {
-						String[] split = line.trim().split(" ");// .trim()可以去掉首尾多余的空格
-						System.out.println(split[0] + " " + split[1]);
-						list.add(new User(split[0], split[1])); // 添加一个User实体
-						i++;
-					}
-					if (list.size() == 0) {
+		        		String[] split = line.trim().split(" ");// .trim()可以去掉首尾多余的空格
+		        		System.out.println(split[0] + " " + split[1]);
+		        		list.add(new User(split[0],split[1])); // 添加一个User实体
+		        		i++;
+		    		}
+					if(list.size() == 0) {
 						JOptionPane.showMessageDialog(c, "用户不存在");
 						inText.setText("");
 						inText.requestFocus();
 						inPsw.setText("");
 						inPsw.requestFocus();
-					} else {
+					}
+					else {
 						int flag = 0;
-						for (int m = 0; m < list.size(); m++) {
-							User matching = (User) list.get(m);
-							System.out.println(user.registWord + "\n" + user.password);
-							System.out.println(matching.registWord + "\n" + matching.password);
-							if (matching.registWord.equals(user.registWord)) {
+						for(int m = 0; m < list.size(); m++) {
+							User matching = (User)list.get(m);
+							System.out.println(user.registWord+"\n"+user.password);
+							System.out.println(matching.registWord +"\n"+ matching.password);
+							if(matching.registWord.equals(user.registWord)) {
 								flag = 1;
-								if (!matching.password.equals(user.password)) {
+								if(!matching.password.equals(user.password)) {
 									JOptionPane.showMessageDialog(c, "密码错误");
 									inText.setText("");
 									inText.requestFocus();
 									inPsw.setText("");
 									inPsw.requestFocus();
-								} else {
-									setVisible(false);
-									OperatorInterface a = new OperatorInterface();
-									a.start();
+								}
+								else {
+									setVisible(false);//
+									new OperatorInterface();
 								}
 							}
 						}
-						if (flag == 0) {
+						if(flag == 0) {
 							JOptionPane.showMessageDialog(c, "用户不存在啊！");
 							inText.setText("");
 							inText.requestFocus();
@@ -133,11 +136,12 @@ public class LoginInterface extends JFrame {
 						}
 					}
 					reader.close();
-					br.close();
-				} catch (Exception w) {
+				    br.close();
+				}
+				catch(Exception w) {
 					System.out.println("Read text error!");
 				}
-
+				
 			}
 		});
 		registion.addActionListener(new ActionListener() {
@@ -149,9 +153,10 @@ public class LoginInterface extends JFrame {
 
 	public static void main(String[] args) {
 		try {
-			// ffww = new FileWriter("src/OurClient/OURCLIENTS.txt");
+			//ffww =  new FileWriter("src/OurClient/OURCLIENTS.txt");
 			new LoginInterface();
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			System.out.println("Can't build file!");
 		}
 	}

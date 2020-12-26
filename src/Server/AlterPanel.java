@@ -1,4 +1,4 @@
-package ServerGUI;
+package Server;
 
 import javax.swing.*;
 import java.awt.*;

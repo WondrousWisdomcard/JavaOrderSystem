@@ -1,5 +1,4 @@
-package ClientGUI;
-
+package Client;
 import java.awt.*;
 import javax.swing.*;
 

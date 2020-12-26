@@ -1,4 +1,4 @@
-package ServerGUI;
+package Server;
 
 import java.util.List;
 import java.awt.*;
@@ -62,8 +62,23 @@ public class ServerOperatorInterface extends JFrame {
 			try {
 				pcc = (PurchaseCuisines) ois.readObject();
 				if (!pcc.isEmpty()) {
-					System.out.println("New Cuisine:");
+					System.out.println("New Cuisine");
+					
+					if(orderForm[0] != null && orderForm[0].accept.isEnabled()){
+						JDialog result4 = new JDialog();
+								result4.setTitle("火锅点餐管理系统");
+								result4.setBounds(600, 400, 350, 100);
+								result4.setLayout(new FlowLayout(1));
+								JLabel k4 = new JLabel();
+								k4.setFont(new Font("宋体", Font.BOLD, 20));
+								k4.setText("您有未处理订单!");
+								result4.add(k4);
+								result4.setVisible(true);
+								while(orderForm[0].accept.isEnabled());
+					}
+
 					newTask(pcc);
+					ep.setNum(ep.getNum()+1);
 					return true;
 				} else {
 					return false;
@@ -93,13 +108,19 @@ public class ServerOperatorInterface extends JFrame {
 							if (sign == 1) {
 								System.out.println("Server Reaction: YES");
 								send("Y" + orderNum);
-							} else if (sign == 0) {
+								enable = 0;
+								sign = -1;
+								orderNum++;
+								break;
+							} 
+							else if (sign == 0) {
 								System.out.println("Server Reaction: NO");
 								send("N" + orderNum);
+								enable = 0;
+								sign = -1;
+								orderNum++;
+								break;
 							}
-							enable = 0;
-							sign = -1;
-							orderNum++;
 						}
 					}
 				} catch (ClassNotFoundException e) {
@@ -121,8 +142,9 @@ public class ServerOperatorInterface extends JFrame {
 	}
 
 	public void newTask(PurchaseCuisines plist) {
-		orderForm[0] = new TaskItemPanel(plist);
 
+		orderForm[0] = new TaskItemPanel(plist);
+		
 		ep.order_list.add(orderForm[0]);// 将任务加入右框
 		ep.order_list.setVisible(false);
 		ep.order_list.setVisible(true);

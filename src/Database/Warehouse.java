@@ -8,10 +8,10 @@ public class Warehouse extends HashMap<String, HashMap<String, Cuisine>> {// ≤À∆
 
 	public Warehouse() {
 		HashMap<String, Cuisine> pot_bottom = new HashMap<String, Cuisine>();// ∂®“ÂkeyŒ™≤À∆∑ID£¨valueŒ™≤À∆∑µƒmap
-		pot_bottom.put("022", new HotPotCondiment("œ œ„«—÷≠", 100, "src/image/022.jpg", 68.0, "022"));
-		pot_bottom.put("023", new HotPotCondiment("æ˙Ã¿", 100, "src/image/023.jpg", 68.0, "023"));
-		pot_bottom.put("024", new HotPotCondiment("‘ß—Ï", 100, "src/image/024.jpg", 68.0, "024"));
-		pot_bottom.put("025", new HotPotCondiment("¬È¿±", 100, "src/image/025.jpg", 68.0, "025"));
+		pot_bottom.put("022", new HotPotCondiment("œ œ„«—÷≠", 100, "src/image/022.jpg", 48.0, "022"));
+		pot_bottom.put("023", new HotPotCondiment("æ˙Ã¿", 100, "src/image/023.jpg", 48.0, "023"));
+		pot_bottom.put("024", new HotPotCondiment("‘ß—Ï", 100, "src/image/024.jpg", 48.0, "024"));
+		pot_bottom.put("025", new HotPotCondiment("¬È¿±", 100, "src/image/025.jpg", 48.0, "025"));
 
 		HashMap<String, Cuisine> drink = new HashMap<String, Cuisine>();
 		drink.put("018", new Drinks("ø…¿÷", 100, "src/image/018.jpg", 4, "018"));
@@ -24,13 +24,13 @@ public class Warehouse extends HashMap<String, HashMap<String, Cuisine>> {// ≤À∆
 		drink.put("037", new Drinks("«‡µ∫∆°æ∆", 100, "src/image/037.jpg", 13, "037"));
  
 		HashMap<String, Cuisine> meat = new HashMap<String, Cuisine>();
-		meat.put("001", new Meet("ƒ€≈£»‚", 100, "src/image/001.jpg", 32.5, "001"));
-		meat.put("002", new Meet("∑ ≈£»‚", 100, "src/image/002.jpg", 23.0, "002"));
-		meat.put("003", new Meet("—©ª®≈£»‚", 100, "src/image/003.jpg", 25.0, "003"));
-		meat.put("004", new Meet("≈£…‡", 100, "src/image/004.jpg", 55.0, "004"));
-		meat.put("005", new Meet("≈£∂«", 100, "src/image/005.jpg", 32.5, "005"));
-		meat.put("006", new Meet("≥◊±˙", 100, "src/image/006.jpg", 45.5, "006"));
-		meat.put("007", new Meet("œ ≈£»‚ÕË", 100, "src/image/007.jpg", 45.5, "007"));
+		meat.put("001", new Meat("ƒ€≈£»‚", 100, "src/image/001.jpg", 32.5, "001"));
+		meat.put("002", new Meat("∑ ≈£»‚", 100, "src/image/002.jpg", 23.0, "002"));
+		meat.put("003", new Meat("—©ª®≈£»‚", 100, "src/image/003.jpg", 25.0, "003"));
+		meat.put("004", new Meat("≈£…‡", 100, "src/image/004.jpg", 55.0, "004"));
+		meat.put("005", new Meat("≈£∂«", 100, "src/image/005.jpg", 32.5, "005"));
+		meat.put("006", new Meat("≥◊±˙", 100, "src/image/006.jpg", 45.5, "006"));
+		meat.put("007", new Meat("œ ≈£»‚ÕË", 100, "src/image/007.jpg", 45.5, "007"));
 
 		HashMap<String, Cuisine> snack = new HashMap<String, Cuisine>();
 		snack.put("008", new Snack("¥∫æÌ", 100, "src/image/008.jpg", 22.0, "008"));

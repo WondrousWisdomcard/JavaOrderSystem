@@ -1,4 +1,4 @@
-package ClientGUI;
+package Client;
 
 import java.util.*;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.io.OutputStreamWriter;
 public class RegistWindow extends JFrame{
 	public RegistWindow() {
 		setTitle("注册");
-		setBounds(450, 300, 500, 320);
+		setBounds(450, 300, 580, 250);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		Container c = getContentPane();
@@ -57,18 +57,37 @@ public class RegistWindow extends JFrame{
 		inTextCodeCorrect.setBounds(180, 145, 200, 20);
 		
 		JButton registion = new JButton("确认");
-		registion.setFont(new Font("宋体", Font.BOLD, 20));
+		registion.setFont(new Font("宋体", Font.BOLD, 24));
 		registion.setBorderPainted(false);
 		registion.setBackground(new Color(255, 255, 224));
-		registion.setBounds(200, 230, 100, 40);
+		registion.setBounds(170, 160, 100, 40);
 		
 		registion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				String aixing_a=new String(inTextCode.getPassword());
 				String aixingwuyue_b=new String(inTextCodeCorrect.getPassword());
-				//System.out.println(aixing_a + "\n" + aixingwuyue_b);
-				if(!aixing_a.equals(aixingwuyue_b)) {
+				System.out.println(aixing_a + "\n" + aixingwuyue_b);
+				String admin = new String(inText.getText());
+				if(admin.equals("")) {
+					JOptionPane.showMessageDialog(c, "用户名不能为空");
+					inTextCode.setText("");
+					inTextCode.requestFocus();
+					inTextCodeCorrect.setText("");
+					inTextCodeCorrect.requestFocus();
+					inText.setText("");
+					inText.requestFocus();
+				}
+				else if(aixing_a.equals("")) {
+					JOptionPane.showMessageDialog(c, "密码不能为空");
+					inTextCode.setText("");
+					inTextCode.requestFocus();
+					inTextCodeCorrect.setText("");
+					inTextCodeCorrect.requestFocus();
+					inText.setText("");
+					inText.requestFocus();
+				}
+				else if(!aixing_a.equals(aixingwuyue_b)) {
 					JOptionPane.showMessageDialog(c, "密码校验错误");
 					inTextCode.setText("");
 					inTextCode.requestFocus();
@@ -90,19 +109,19 @@ public class RegistWindow extends JFrame{
 						BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言
 						String line = ""; // 每一行的内容
 						int i = 1;
-						//System.out.println("Before while");
+						System.out.println("Before while");
 				    	while ((line = br.readLine()) != null) {
 				        	String[] split = line.trim().split(" ");// .trim()可以去掉首尾多余的空格
-				        	//System.out.println(split[0] + "\n" + split[1]);
+				        	System.out.println(split[0] + "\n" + split[1]);
 				        	list.add(new User(split[0],split[1])); // 添加一个User实体
 				        	i++;
 				    	}
-				    	//System.out.println("Before");
+				    	System.out.println("Before");
 				    	if(list.size() == 0) {
 				    	    FileOutputStream fos = new FileOutputStream(file);
 				    	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
 				    	    writer.write(user.toString() + "\n");
-				    	    //System.out.println("Write to text:"+user.toString()+"\n");
+				    	    System.out.println("Write to text:"+user.toString()+"\n");
 				    	    JOptionPane.showMessageDialog(c, "注册成功");
 				    	    //line = br.readLine();
 				    	    //System.out.println("Line 0:"+line);
@@ -128,6 +147,10 @@ public class RegistWindow extends JFrame{
 				    		if(flag == 0) {
 				    			FileOutputStream fos = new FileOutputStream(file);
 					    	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+					    	    for(int temp = 0; temp < list.size(); temp++) {
+					    	    	User u = (User)list.get(temp);
+					    	    	writer.write(u.toString()+"\n");
+					    	    }
 					    	    writer.write(user.toString() + "\n");
 					    	    System.out.println(user.toString());
 					    	    writer.close();
@@ -158,8 +181,8 @@ public class RegistWindow extends JFrame{
 		c.add(inTextCode);
 		c.add(CorrectPassword);
 		c.add(inTextCodeCorrect);
-        c.add(registion);
-        setResizable(false);
+		c.add(registion);
+		setResizable(false);
 		setVisible(true);
 	}
 	public static void main(String args[]) {

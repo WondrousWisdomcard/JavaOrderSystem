@@ -1,4 +1,4 @@
-package ServerGUI;
+package Server;
 
 import java.awt.*;
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class EastPanel extends JPanel {
 		JScrollPane js = new JScrollPane(order_list);
 		js.setBorder(BorderFactory.createEmptyBorder());
 
-		count = new JLabel("当前订单数量： " + num);
+		count = new JLabel("今日订单数量： " + num);
 		count.setFont(new Font("宋体", Font.BOLD, 30));
 
 		countPart = new JPanel();
@@ -39,8 +39,12 @@ public class EastPanel extends JPanel {
 		add(countPart, BorderLayout.SOUTH);
 	}
 
+	public int getNum() {
+		return num;
+	}
+
 	public void setNum(int num) {
 		this.num = num;
-		count.setText("当前订单数量： " + num);
+		count.setText("今日订单数量： " + num);
 	}
 }
