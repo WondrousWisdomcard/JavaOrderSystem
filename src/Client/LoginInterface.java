@@ -90,7 +90,7 @@ public class LoginInterface extends JFrame {
 					User user = new User(new String(inText.getText()),new String(inPsw.getPassword()));
 					File file = new File("src\\OurClient\\OURCLIENTS.txt");
 					//C:\Users\Administrator\eclipse-workspace\JavaOrderSystem\src\OurClient
-					System.out.println("Read in Client Text");
+					//System.out.println("Read in Client Text");
 					List<User> list = new ArrayList<>();
 					InputStreamReader reader = new InputStreamReader(new FileInputStream(file)); // 建立一个输入流对象reader
 					BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言
@@ -121,8 +121,8 @@ public class LoginInterface extends JFrame {
 						int flag = 0;
 						for(int m = 0; m < list.size(); m++) {
 							User matching = (User)list.get(m);
-							System.out.println(user.registWord+"\n"+user.password);
-							System.out.println(matching.registWord +"\n"+ matching.password);
+							//System.out.println(user.registWord+"\n"+user.password);
+							//System.out.println(matching.registWord +"\n"+ matching.password);
 							if(matching.registWord.equals(user.registWord)) {
 								flag = 1;
 								if(!matching.password.equals(user.password)) {

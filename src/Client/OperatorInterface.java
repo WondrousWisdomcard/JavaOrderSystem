@@ -317,11 +317,11 @@ public class OperatorInterface extends JFrame {
 				}
 			}
 			if (btn.getText().equals("³·Ïú")) {
+				countPrice -= orderForm[i].price * orderForm[i].num;
 				orderForm[i].setNum(1);
 				orderForm[i].setName("ÎÞ");
 				orderForm[i].setPrice(0.0);
 				orderForm[i].id = "000";
-				countPrice -= orderForm[i].price * orderForm[i].num;
 				orderForm[i].amount = 0.0;
 				orderForm[i].setVisible(false);
 			}

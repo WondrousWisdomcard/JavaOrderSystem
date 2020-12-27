@@ -67,7 +67,7 @@ public class RegistWindow extends JFrame{
 
 				String aixing_a=new String(inTextCode.getPassword());
 				String aixingwuyue_b=new String(inTextCodeCorrect.getPassword());
-				System.out.println(aixing_a + "\n" + aixingwuyue_b);
+				//System.out.println(aixing_a + "\n" + aixingwuyue_b);
 				String admin = new String(inText.getText());
 				if(admin.equals("")) {
 					JOptionPane.showMessageDialog(c, "用户名不能为空");
@@ -109,7 +109,7 @@ public class RegistWindow extends JFrame{
 						BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言
 						String line = ""; // 每一行的内容
 						int i = 1;
-						System.out.println("Before while");
+						//System.out.println("Before while");
 				    	while ((line = br.readLine()) != null) {
 				        	String[] split = line.trim().split(" ");// .trim()可以去掉首尾多余的空格
 				        	System.out.println(split[0] + "\n" + split[1]);
@@ -121,7 +121,7 @@ public class RegistWindow extends JFrame{
 				    	    FileOutputStream fos = new FileOutputStream(file);
 				    	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
 				    	    writer.write(user.toString() + "\n");
-				    	    System.out.println("Write to text:"+user.toString()+"\n");
+				    	    //System.out.println("Write to text:"+user.toString()+"\n");
 				    	    JOptionPane.showMessageDialog(c, "注册成功");
 				    	    //line = br.readLine();
 				    	    //System.out.println("Line 0:"+line);
@@ -152,7 +152,7 @@ public class RegistWindow extends JFrame{
 					    	    	writer.write(u.toString()+"\n");
 					    	    }
 					    	    writer.write(user.toString() + "\n");
-					    	    System.out.println(user.toString());
+					    	    //System.out.println(user.toString());
 					    	    writer.close();
 					    	    fos.close();
 					    	    JOptionPane.showMessageDialog(c, "注册成功");

@@ -14,3 +14,8 @@ Note:
 3. DataBase为食材管理源码
 4. image存储GUI所使用的图片
 5. ServerGUI为服务端界面源码
+6. OurCilent存的是用户信息
+   
+## 还有好多BUG！
+
+## 感觉前后端混乱。

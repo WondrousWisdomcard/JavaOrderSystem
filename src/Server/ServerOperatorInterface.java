@@ -89,7 +89,7 @@ public class ServerOperatorInterface extends JFrame {
 					return false;
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			return false;
 		}
