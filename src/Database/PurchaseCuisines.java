@@ -5,16 +5,14 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class PurchaseCuisines extends ArrayList<HasCuisine> implements Serializable {// ¹Ë¿ÍÒÑ¹ºÂò²ËÆ·
+public class PurchaseCuisines extends ArrayList<HasCuisine> implements Serializable {// ï¿½Ë¿ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Æ·
 
 	private static final long serialVersionUID = 1L;
+	
 	public String context = new String();
 
 	public boolean addCuisine(HasCuisine hasc) {
-		if (add(hasc))
-			return true;
-		else
-			return false;
+		return add(hasc);
 	}
 
 	public void setString(){
@@ -27,14 +25,14 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> implements Serializa
 		System.out.println(context);
 	}
 
-	public void printFile(int peoples, double amount) {
+	public void printFile(int people, double amount) {
 		Date date = new Date();
 		SimpleDateFormat time = new SimpleDateFormat("yyMMddHHmmss");
-		SimpleDateFormat time1 = new SimpleDateFormat("yyÄêMMÔÂddÈÕHH£ºmm£ºss");
+		SimpleDateFormat time1 = new SimpleDateFormat("yyï¿½ï¿½MMï¿½ï¿½ddï¿½ï¿½HHï¿½ï¿½mmï¿½ï¿½ss");
 		try {
-			FileWriter out = new FileWriter("src/bill/" + time.format(date) + ".txt");// ÒÔÏÂµ¥Ê±¼äÎªÎÄ¼þÃû
+			FileWriter out = new FileWriter("src/bill/" + time.format(date) + ".txt");// ï¿½ï¿½ï¿½Âµï¿½Ê±ï¿½ï¿½Îªï¿½Ä¼ï¿½ï¿½ï¿½
 			BufferedWriter buf = new BufferedWriter(out);
-			buf.write("²èÎ»·Ñ" + " " + "6.0" + "x" + peoples + " " + peoples * 6.0);
+			buf.write("ï¿½ï¿½Î»ï¿½ï¿½" + " " + "6.0" + "x" + people + " " + people * 6.0);
 			buf.newLine();
 			for (int i = 0; i < size(); i++) {
 				if (get(i).getname() != "") {
@@ -43,8 +41,8 @@ public class PurchaseCuisines extends ArrayList<HasCuisine> implements Serializa
 					buf.newLine();
 				}
 			}
-			double finAmount = amount + peoples * 6.0;
-			buf.write("×Ü¼Æ£º" + finAmount);
+			double finAmount = amount + people * 6.0;
+			buf.write("ï¿½Ü¼Æ£ï¿½" + finAmount);
 			buf.newLine();
 			buf.write(time1.format(date));
 			buf.close();

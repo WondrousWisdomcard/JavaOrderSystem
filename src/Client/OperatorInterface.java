@@ -237,6 +237,7 @@ public class OperatorInterface extends JFrame {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			JDialog result = new JDialog();
+			result.setModal(true);
 			result.setTitle("火锅点餐系统 - 网络连接检查");
 			result.setBounds(600, 400, 350, 100);
 			result.setLayout(new FlowLayout(1));
@@ -245,6 +246,7 @@ public class OperatorInterface extends JFrame {
 			k.setText("网络错误！");
 			result.add(k);
 			result.setVisible(true);
+			
 		}
 	}
 
